@@ -2,14 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/D:/HUTECH_IT/LT_MMT/Chat_Ant/src/chat_ant/frmRegister.java</file>
-            <file>file:/D:/HUTECH_IT/LT_MMT/Chat_Ant/src/chat_ant/Main.java</file>
-            <file>file:/D:/HUTECH_IT/LT_MMT/Chat_Ant/src/chat_ant/MyConnection.java</file>
-            <file>file:/D:/HUTECH_IT/LT_MMT/Chat_Ant/src/chat_ant/frmChat.java</file>
-            <file>file:/D:/HUTECH_IT/LT_MMT/Chat_Ant/src/chat_ant/frmLogin.java</file>
-            <file>file:/D:/HUTECH_IT/LT_MMT/Chat_Ant/src/chat_ant/Server.java</file>
-            <file>file:/D:/HUTECH_IT/LT_MMT/Chat_Ant/src/chat_ant/DBAccess.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

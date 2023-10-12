@@ -21,6 +21,10 @@ public class Server {
             String[] parts = reader.readLine().split(" ");
             String username = parts[0].substring(0, parts[0].length() - 1);
             System.out.println("Username of connected client: " + username);
+            
+            ClientHandler clientHandler = new ClientHandler(clientSocket, username);
+            clients.add(clientHandler);
+            clientHandler.start();
         }
     }
 
