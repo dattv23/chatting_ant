@@ -38,7 +38,8 @@ public class App extends javax.swing.JFrame {
     private BufferedReader reader;
     private PrintWriter writer;
     private String username;
-     private String userNameRecipient;
+    private String userNameRecipient;
+
     DefaultListModel mod = new DefaultListModel();
     public static  DefaultListModel<String> mod1=new DefaultListModel<String>();
     /**
@@ -92,6 +93,7 @@ public class App extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         main = new javax.swing.JPanel();
         jPTool = new javax.swing.JPanel();
+        jLMenu = new javax.swing.JLayeredPane();
         jPSearch = new javax.swing.JPanel();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
@@ -135,6 +137,9 @@ public class App extends javax.swing.JFrame {
                 formComponentHidden(evt);
             }
         });
+
+        jLMenu.setBackground(new java.awt.Color(153, 153, 153));
+        jLMenu.setLayout(new java.awt.GridLayout(1, 0));
 
         btnSearch.setText("Tìm Kiếm");
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -180,14 +185,17 @@ public class App extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnDangXuat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnDangXuat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(39, Short.MAX_VALUE)
                 .addComponent(btnDangXuat, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         lbName.setText("Tên Người Dùng:");
@@ -242,6 +250,8 @@ public class App extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(14, 14, 14))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPchat.setBackground(new java.awt.Color(255, 255, 255));
@@ -505,6 +515,13 @@ public class App extends javax.swing.JFrame {
     private void formComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentHidden
         // TODO add your handling code here:
     }//GEN-LAST:event_formComponentHidden
+
+    }//GEN-LAST:event_btnfrActionPerformed
+
+    private void btnSend1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSend1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSend1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -547,6 +564,8 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JButton btnSend;
     private javax.swing.JButton btnfr;
     private javax.swing.JButton btnmess;
+    private javax.swing.JButton btnSend1;
+    private javax.swing.JLayeredPane jLMenu;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JLayeredPane jLayeredPane3;
