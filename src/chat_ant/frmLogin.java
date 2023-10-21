@@ -138,7 +138,7 @@ public class frmLogin extends javax.swing.JFrame {
             if (rs.next()) {
                 JOptionPane.showMessageDialog(null, "Đăng nhập thành công!");
                 this.setVisible(false);
-                frmChat formChat = new frmChat(txtTenDangNhap.getText());
+                frmroom formChat = new frmroom(txtTenDangNhap.getText());
                 formChat.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(null, "Đăng nhập thất bại!");

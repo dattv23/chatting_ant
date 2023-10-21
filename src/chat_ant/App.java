@@ -4,15 +4,20 @@
  */
 package chat_ant;
 
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -23,8 +28,9 @@ import javax.swing.JPanel;
  *
  * @author Tuan
  */
-public class App extends javax.swing.JFrame {
 
+public class App extends javax.swing.JFrame {
+    //private static List<pair>IDGROUP=Arrays.asList(new pair("1","239.0.0.36"),new pair("2","239.0.0.38"));
     boolean displaySetting = false;
     private Socket socket;
     private InputStream is;
@@ -35,17 +41,17 @@ public class App extends javax.swing.JFrame {
     private String userNameRecipient;
 
     DefaultListModel mod = new DefaultListModel();
-
+    public static  DefaultListModel<String> mod1=new DefaultListModel<String>();
     /**
      * Creates new form Zalo
      */
     public App(String username) {
-        initComponents();
+       initComponents();
         this.username = username;
         lbUser.setText(username);
         //lbUserName.setText(username);
         // jListFriend.setVisible(true);
-        jPChatRoom.setVisible(false);
+        
         showListFriend();
 
         try {
@@ -97,6 +103,9 @@ public class App extends javax.swing.JFrame {
         btnDangXuat = new javax.swing.JButton();
         lbName = new javax.swing.JLabel();
         lbUser = new javax.swing.JLabel();
+        jLayeredPane3 = new javax.swing.JLayeredPane();
+        btnmess = new javax.swing.JButton();
+        btnfr = new javax.swing.JButton();
         jPListfr = new javax.swing.JPanel();
         jPchat = new javax.swing.JPanel();
         jPtitle = new javax.swing.JPanel();
@@ -110,17 +119,6 @@ public class App extends javax.swing.JFrame {
         jPbody = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtKhungChat = new javax.swing.JTextArea();
-        jPChatRoom = new javax.swing.JPanel();
-        jPtitle1 = new javax.swing.JPanel();
-        jLayeredPane2 = new javax.swing.JLayeredPane();
-        lbUserName1 = new javax.swing.JLabel();
-        jPnhapchat1 = new javax.swing.JPanel();
-        jPanel7 = new javax.swing.JPanel();
-        btnSend1 = new javax.swing.JButton();
-        txtMessage1 = new javax.swing.JTextField();
-        jPbody1 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        txtKhungChat1 = new javax.swing.JTextArea();
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -134,6 +132,11 @@ public class App extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                formComponentHidden(evt);
+            }
+        });
 
         jLMenu.setBackground(new java.awt.Color(153, 153, 153));
         jLMenu.setLayout(new java.awt.GridLayout(1, 0));
@@ -157,8 +160,8 @@ public class App extends javax.swing.JFrame {
         jPSearchLayout.setHorizontalGroup(
             jPSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtSearch)
-            .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+            .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPSearchLayout.setVerticalGroup(
             jPSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -200,29 +203,53 @@ public class App extends javax.swing.JFrame {
         lbUser.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lbUser.setForeground(new java.awt.Color(51, 153, 255));
 
+        jLayeredPane3.setLayout(new java.awt.GridLayout(1, 0, 2, 0));
+
+        btnmess.setText("jButton1");
+        btnmess.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnmessActionPerformed(evt);
+            }
+        });
+        jLayeredPane3.add(btnmess);
+
+        btnfr.setText("jButton2");
+        btnfr.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnfrActionPerformed(evt);
+            }
+        });
+        jLayeredPane3.add(btnfr);
+
         javax.swing.GroupLayout jPToolLayout = new javax.swing.GroupLayout(jPTool);
         jPTool.setLayout(jPToolLayout);
         jPToolLayout.setHorizontalGroup(
             jPToolLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLMenu)
             .addComponent(jPSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPToolLayout.createSequentialGroup()
-                .addComponent(lbName, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lbUser, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(1, 1, 1)
+                .addGroup(jPToolLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLayeredPane3)
+                    .addGroup(jPToolLayout.createSequentialGroup()
+                        .addComponent(lbName, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lbUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         jPToolLayout.setVerticalGroup(
             jPToolLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPToolLayout.createSequentialGroup()
-                .addComponent(jLMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLayeredPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPToolLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbName)
                     .addComponent(lbUser))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -281,6 +308,12 @@ public class App extends javax.swing.JFrame {
             .addComponent(btnSend, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
         );
 
+        txtMessage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMessageActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPnhapchatLayout = new javax.swing.GroupLayout(jPnhapchat);
         jPnhapchat.setLayout(jPnhapchatLayout);
         jPnhapchatLayout.setHorizontalGroup(
@@ -331,106 +364,6 @@ public class App extends javax.swing.JFrame {
                 .addComponent(jPnhapchat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jPChatRoom.setBackground(new java.awt.Color(255, 255, 255));
-
-        jPtitle1.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLayeredPane2.setLayout(new java.awt.GridLayout(0, 1));
-
-        lbUserName1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lbUserName1.setText("Chat Room");
-        jLayeredPane2.add(lbUserName1);
-
-        javax.swing.GroupLayout jPtitle1Layout = new javax.swing.GroupLayout(jPtitle1);
-        jPtitle1.setLayout(jPtitle1Layout);
-        jPtitle1Layout.setHorizontalGroup(
-            jPtitle1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPtitle1Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(jLayeredPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPtitle1Layout.setVerticalGroup(
-            jPtitle1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPtitle1Layout.createSequentialGroup()
-                .addComponent(jLayeredPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        jPnhapchat1.setBackground(new java.awt.Color(255, 255, 255));
-
-        jPanel7.setBackground(new java.awt.Color(255, 255, 255));
-
-        btnSend1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/send (1).png"))); // NOI18N
-        btnSend1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSend1ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnSend1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnSend1, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jPnhapchat1Layout = new javax.swing.GroupLayout(jPnhapchat1);
-        jPnhapchat1.setLayout(jPnhapchat1Layout);
-        jPnhapchat1Layout.setHorizontalGroup(
-            jPnhapchat1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPnhapchat1Layout.createSequentialGroup()
-                .addComponent(txtMessage1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPnhapchat1Layout.setVerticalGroup(
-            jPnhapchat1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(txtMessage1, javax.swing.GroupLayout.Alignment.TRAILING)
-        );
-
-        jPbody1.setBackground(new java.awt.Color(255, 255, 255));
-
-        txtKhungChat1.setColumns(20);
-        txtKhungChat1.setRows(5);
-        jScrollPane3.setViewportView(txtKhungChat1);
-
-        javax.swing.GroupLayout jPbody1Layout = new javax.swing.GroupLayout(jPbody1);
-        jPbody1.setLayout(jPbody1Layout);
-        jPbody1Layout.setHorizontalGroup(
-            jPbody1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
-        );
-        jPbody1Layout.setVerticalGroup(
-            jPbody1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jPChatRoomLayout = new javax.swing.GroupLayout(jPChatRoom);
-        jPChatRoom.setLayout(jPChatRoomLayout);
-        jPChatRoomLayout.setHorizontalGroup(
-            jPChatRoomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPtitle1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPnhapchat1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPbody1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPChatRoomLayout.setVerticalGroup(
-            jPChatRoomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPChatRoomLayout.createSequentialGroup()
-                .addComponent(jPtitle1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPbody1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPnhapchat1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
         javax.swing.GroupLayout jPListfrLayout = new javax.swing.GroupLayout(jPListfr);
         jPListfr.setLayout(jPListfrLayout);
         jPListfrLayout.setHorizontalGroup(
@@ -438,20 +371,12 @@ public class App extends javax.swing.JFrame {
             .addGap(0, 742, Short.MAX_VALUE)
             .addGroup(jPListfrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jPchat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPListfrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPListfrLayout.createSequentialGroup()
-                    .addComponent(jPChatRoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap()))
         );
         jPListfrLayout.setVerticalGroup(
             jPListfrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 770, Short.MAX_VALUE)
             .addGroup(jPListfrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jPchat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPListfrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPListfrLayout.createSequentialGroup()
-                    .addComponent(jPChatRoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap()))
         );
 
         javax.swing.GroupLayout mainLayout = new javax.swing.GroupLayout(main);
@@ -490,25 +415,26 @@ public class App extends javax.swing.JFrame {
 
     private void btnmessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmessActionPerformed
         // TODO add your handling code here:
-
+        jPchat.setVisible(true);
+        
     }//GEN-LAST:event_btnmessActionPerformed
 
     private void btnmessMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnmessMouseClicked
         // TODO add your handling code here:
-        jPchat.setVisible(true);
-        jPChatRoom.setVisible(false);
+//        jPchat.setVisible(true);
+//        jPChatRoom.setVisible(false);
     }//GEN-LAST:event_btnmessMouseClicked
 
     private void btnfrMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnfrMouseClicked
         // TODO add your handling code here:
-        jPChatRoom.setVisible(true);
+       
         // jListFriend.setVisible(true);
         jPchat.setVisible(false);
     }//GEN-LAST:event_btnfrMouseClicked
 
     private void btnSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendActionPerformed
         // TODO add your handling code here:
-        String message = txtMessage.getText();
+         String message = txtMessage.getText();
         if (!message.isEmpty()) {
             txtKhungChat.append(username + ": " + message + "\n");
             String recipient = userNameRecipient; // Thay thế bằng username của người nhận
@@ -574,6 +500,21 @@ public class App extends javax.swing.JFrame {
 
     private void btnfrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnfrActionPerformed
         // TODO add your handling code here:
+       new frmroom(username).setVisible(true);
+        // jListFriend.setVisible(true);
+        jPchat.setVisible(false);
+        
+    }//GEN-LAST:event_btnfrActionPerformed
+
+
+ 
+    private void txtMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMessageActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMessageActionPerformed
+
+    private void formComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentHidden
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formComponentHidden
 
     }//GEN-LAST:event_btnfrActionPerformed
 
@@ -621,39 +562,34 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JButton btnDangXuat;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnSend;
+    private javax.swing.JButton btnfr;
+    private javax.swing.JButton btnmess;
     private javax.swing.JButton btnSend1;
     private javax.swing.JLayeredPane jLMenu;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLayeredPane jLayeredPane1;
-    private javax.swing.JLayeredPane jLayeredPane2;
-    private javax.swing.JPanel jPChatRoom;
+    private javax.swing.JLayeredPane jLayeredPane3;
     private javax.swing.JPanel jPListfr;
     private javax.swing.JPanel jPSearch;
     private javax.swing.JPanel jPTool;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPbody;
-    private javax.swing.JPanel jPbody1;
     private javax.swing.JPanel jPchat;
     private javax.swing.JPanel jPnhapchat;
-    private javax.swing.JPanel jPnhapchat1;
     private javax.swing.JPanel jPtitle;
-    private javax.swing.JPanel jPtitle1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JList<String> lFriend;
     private javax.swing.JLabel lbName;
     private javax.swing.JLabel lbUser;
     private javax.swing.JLabel lbUserName;
-    private javax.swing.JLabel lbUserName1;
     private javax.swing.JPanel main;
     private javax.swing.JTextArea txtKhungChat;
-    private javax.swing.JTextArea txtKhungChat1;
     private javax.swing.JTextField txtMessage;
-    private javax.swing.JTextField txtMessage1;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }
+
+
