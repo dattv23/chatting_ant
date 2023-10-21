@@ -19,9 +19,10 @@ public class Server {
             System.out.println("Client connected: " + clientSocket);
             BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String[] parts = reader.readLine().split(" ");
-            String username = parts[0].substring(0, parts[0].length() - 1);
+            // String username = parts[0].substring(0, parts[0].length() - 1);
+            String username = parts[0];
             System.out.println("Username of connected client: " + username);
-            
+
             ClientHandler clientHandler = new ClientHandler(clientSocket, username);
             clients.add(clientHandler);
             clientHandler.start();
@@ -52,7 +53,15 @@ public class Server {
                 String message;
                 while ((message = reader.readLine()) != null) {
                     System.out.println("Received: " + message);
-                    broadcast(message, username);
+                    // Kiểm tra nếu đây là tin nhắn cho người nhận cụ thể
+                    if (message.startsWith("MESSAGE")) {
+                        String[] parts = message.split(" ");
+                        String recipient = parts[1];
+                        String messageContent = message.substring(9 + recipient.length());
+                        broadcast("MESSAGE " + recipient + " " + messageContent, recipient);
+                    } else {
+                        broadcast(message, username);
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -70,10 +79,9 @@ public class Server {
 
         public void broadcast(String message, String recipient) {
             for (ClientHandler client : clients) {
-                if (!client.username.equals(username)) {
-                    if (client.username.equals(recipient) || username.equals(recipient)) {
-                        client.writer.println(message);
-                    }
+                if (client.username.equals(recipient) || username.equals(recipient)) {
+                    String messageContent = message.substring(9 + recipient.length());
+                    client.writer.println(username + ": " + messageContent);
                 }
             }
         }

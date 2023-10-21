@@ -32,6 +32,7 @@ public class App extends javax.swing.JFrame {
     private BufferedReader reader;
     private PrintWriter writer;
     private String username;
+    private String userNameRecipient;
 
     DefaultListModel mod = new DefaultListModel();
 
@@ -54,11 +55,14 @@ public class App extends javax.swing.JFrame {
             reader = new BufferedReader(new InputStreamReader(is));
             writer = new PrintWriter(os, true);
 
+            writer.println(username);
+
             // Start a new thread to listen for incoming messages
             new Thread(() -> {
                 try {
                     String message;
                     while ((message = reader.readLine()) != null) {
+                        String sender = message.substring(0, message.indexOf(':'));
                         txtKhungChat.append(message + "\n");
                     }
                 } catch (IOException e) {
@@ -84,8 +88,6 @@ public class App extends javax.swing.JFrame {
         main = new javax.swing.JPanel();
         jPTool = new javax.swing.JPanel();
         jLMenu = new javax.swing.JLayeredPane();
-        btnmess = new chat_ant.menuButton();
-        btnfr = new chat_ant.menuButton();
         jPSearch = new javax.swing.JPanel();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
@@ -136,33 +138,6 @@ public class App extends javax.swing.JFrame {
         jLMenu.setBackground(new java.awt.Color(153, 153, 153));
         jLMenu.setLayout(new java.awt.GridLayout(1, 0));
 
-        btnmess.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/chat (2).png"))); // NOI18N
-        btnmess.setPreferredSize(new java.awt.Dimension(40, 42));
-        btnmess.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnmessMouseClicked(evt);
-            }
-        });
-        btnmess.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnmessActionPerformed(evt);
-            }
-        });
-        jLMenu.add(btnmess);
-
-        btnfr.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/friends.png"))); // NOI18N
-        btnfr.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnfrMouseClicked(evt);
-            }
-        });
-        btnfr.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnfrActionPerformed(evt);
-            }
-        });
-        jLMenu.add(btnfr);
-
         btnSearch.setText("Tìm Kiếm");
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -207,14 +182,17 @@ public class App extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnDangXuat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnDangXuat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(39, Short.MAX_VALUE)
                 .addComponent(btnDangXuat, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         lbName.setText("Tên Người Dùng:");
@@ -245,9 +223,8 @@ public class App extends javax.swing.JFrame {
                     .addComponent(lbUser))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPchat.setBackground(new java.awt.Color(255, 255, 255));
@@ -533,9 +510,12 @@ public class App extends javax.swing.JFrame {
         // TODO add your handling code here:
         String message = txtMessage.getText();
         if (!message.isEmpty()) {
-            writer.println(username + ": " + message);
-            txtMessage.setText("");
             txtKhungChat.append(username + ": " + message + "\n");
+            String recipient = userNameRecipient; // Thay thế bằng username của người nhận
+            String messageContent = txtMessage.getText(); // Nội dung tin nhắn
+            String messageToSend = "MESSAGE " + recipient + " " + messageContent;
+            txtMessage.setText("");
+            writer.println(messageToSend);
         }
     }//GEN-LAST:event_btnSendActionPerformed
 
@@ -560,7 +540,7 @@ public class App extends javax.swing.JFrame {
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         // TODO add your handling code here:
         DBAccess acc = new DBAccess();
-        String query = "SELECT * FROM `taikhoan` where `ten_dang_nhap` = " +"\"" + txtSearch.getText() +"\"";
+        String query = "SELECT * FROM `taikhoan` where `ten_dang_nhap` = " + "\"" + txtSearch.getText() + "\"";
         ResultSet rs = acc.Query(query);
         mod.clear();
         try {
@@ -588,52 +568,19 @@ public class App extends javax.swing.JFrame {
     private void lFriendMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lFriendMouseClicked
         // TODO add your handling code here:
         lbUserName.setText(lFriend.getSelectedValue());
+        userNameRecipient = lbUserName.getText();
+        txtKhungChat.setText("");
     }//GEN-LAST:event_lFriendMouseClicked
 
     private void btnfrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnfrActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_btnfrActionPerformed
 
     private void btnSend1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSend1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSend1ActionPerformed
 
-    /*
-    private String searchUsers() {
-        String selectedUsername = null;
-
-        try {
-            DBAccess acc = new DBAccess();
-            ResultSet rs = acc.Query("SELECT `ten_dang_nhap` FROM `taikhoan`");
-
-            StringBuilder userList = new StringBuilder();
-            while (rs.next()) {
-                String user = rs.getString("ten_dang_nhap");
-                if (!user.equals(username)) {
-                    userList.append(user).append("\n");
-                }
-            }
-
-            String input = (String) JOptionPane.showInputDialog(
-                    this,
-                    "Danh sách người dùng:\n" + userList.toString(),
-                    "Chọn người nhắn:",
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    userList.toString().split("\n"),
-                    userList.toString().split("\n")[0]);
-
-            if (input != null) {
-                selectedUsername = input.trim();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return selectedUsername;
-    }
-     */
     /**
      * @param args the command line arguments
      */
@@ -675,8 +622,6 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnSend;
     private javax.swing.JButton btnSend1;
-    private chat_ant.menuButton btnfr;
-    private chat_ant.menuButton btnmess;
     private javax.swing.JLayeredPane jLMenu;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLayeredPane jLayeredPane1;
