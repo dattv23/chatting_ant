@@ -166,7 +166,7 @@ public class frmChat extends javax.swing.JFrame {
         if (!message.isEmpty()) {
             writer.println(username + ": " + message);
             txtTinNhan.setText("");
-            txtKhungChat.append(username + ": " + message + "\n");
+           // txtKhungChat.append(username + ": " + message + "\n");
         }
     }//GEN-LAST:event_btnGoiActionPerformed
 
@@ -203,11 +203,11 @@ public class frmChat extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new frmChat("").setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new frmChat("").setVisible(true);
+//            }
+//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
